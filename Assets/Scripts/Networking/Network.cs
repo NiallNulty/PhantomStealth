@@ -14,6 +14,8 @@ public class Network : MonoBehaviour
     public delegate void UpdateUsernameRequestFailed();
     public delegate void LeaderboardRequestCompleted(LeaderboardController leaderboard);
     public delegate void LeaderboardRequestFailed();
+    public delegate void PostScoreRequestCompleted();
+    public delegate void PostScoreRequestFailed();
 
     public static Network sharedInstance;
 
@@ -277,6 +279,48 @@ public class Network : MonoBehaviour
                 leaderboardRequestFailed();
         }
     }
+
+    public void PostScoreToLeaderboard(string leaderboardID, float time, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
+    {
+        PostScoreToLeaderboard(leaderboardID, time, GetUsername(), postScoreRequestCompleted, postScoreRequestFailed);
+    }
+
+    public void PostScoreToLeaderboard(string leaderboardID, float time, string nickname, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("PostScoreToLeaderboard success: " + responseData);
+
+                if (postScoreRequestCompleted != null)
+                    postScoreRequestCompleted();
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("PostScoreToLeaderboard failed: " + statusMessage);
+
+                if (postScoreRequestFailed != null)
+                    postScoreRequestFailed();
+            };
+
+            // Make the BrainCloud request
+            long score = (long)(time);   
+            string jsonOtherData = "{\"nickname\":\"" + nickname + "\"}";
+            brainCloudWrapper.LeaderboardService.PostScoreToLeaderboard(leaderboardID, score, jsonOtherData, successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("PostScoreToLeaderboard failed: user is not authenticated");
+
+            if (postScoreRequestFailed != null)
+                postScoreRequestFailed();
+        }
+    }
+
 
     private void HandleAuthenticationSuccess(string responseData, object cbObject, AuthenticationRequestCompleted authenticationRequestCompleted)
     {

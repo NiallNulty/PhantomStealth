@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TimerController timerController;
 
+    private Network.PostScoreRequestCompleted postScoreRequestCompleted;
+    private Network.PostScoreRequestFailed postScoreRequestFailed;
+
     private void Start()
     {
         txtUsername.text = Network.sharedInstance.GetUsername();
@@ -96,6 +99,11 @@ public class GameManager : MonoBehaviour
             }
 
             txtTotalPoints.text = "Total Points: " + points;
+
+            if (!string.IsNullOrEmpty(txtUsername.text))
+            {
+                Network.sharedInstance.PostScoreToLeaderboard("Main", points, txtUsername.text, postScoreRequestCompleted, postScoreRequestFailed);
+            }
 
         }
         catch (System.Exception)
