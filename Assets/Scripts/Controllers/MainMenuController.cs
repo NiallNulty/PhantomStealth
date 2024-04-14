@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +18,42 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField]
     private GameObject LeaderboardCanvas;
+
+    private void Start()
+    {
+        if (Network.sharedInstance.IsAuthenticated())
+        {
+            Network.sharedInstance.LogOut();
+        }
+    }
+
+    public void HandleAuthentication()
+    {
+        if (Network.sharedInstance.HasAuthenticatedPreviously())
+        {
+            Network.sharedInstance.Reconnect();
+        }
+        else
+        {
+            Network.sharedInstance.RequestAnonymousAuthentication();
+        }
+
+        StartCoroutine(WaitToLoadLevel());
+    }
+
+    //Try every second for 5 seconds to see if user is authenticated
+    private IEnumerator WaitToLoadLevel()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            yield return new WaitForSecondsRealtime(1f);
+
+            if (Network.sharedInstance.IsAuthenticated())
+            {
+                LoadLevel1Scene();
+            }
+        }
+    }
 
     public void LoadLevel1Scene()
     {
