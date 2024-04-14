@@ -10,6 +10,8 @@ public class Network : MonoBehaviour
     public delegate void AuthenticationRequestFailed();
     public delegate void BrainCloudLogOutCompleted();
     public delegate void BrainCloudLogOutFailed();
+    public delegate void UpdateUsernameRequestCompleted();
+    public delegate void UpdateUsernameRequestFailed();
 
     public static Network sharedInstance;
 
@@ -169,6 +171,43 @@ public class Network : MonoBehaviour
 
         //Make the BrainCloud request
         brainCloudWrapper.AuthenticateUniversal(userID, password, true, successCallback, failureCallback);
+    }
+
+    public void RequestUpdateUsername(string newUsername, UpdateUsernameRequestCompleted updateUsernameRequestCompleted = null, UpdateUsernameRequestFailed updateUsernameRequestFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("RequestUpdateUsername success: " + responseData);
+
+                JsonData jsonData = JsonMapper.ToObject(responseData);
+                username = jsonData["data"]["playerName"].ToString();
+
+                if (updateUsernameRequestCompleted != null)
+                    updateUsernameRequestCompleted();
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("RequestUpdateUsername failed: " + statusMessage);
+
+                if (updateUsernameRequestFailed != null)
+                    updateUsernameRequestFailed();
+            };
+
+            // Make the BrainCloud request
+            brainCloudWrapper.PlayerStateService.UpdateName(newUsername, successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("RequestUpdateUsername failed: user is not authenticated");
+
+            if (updateUsernameRequestFailed != null)
+                updateUsernameRequestFailed();
+        }
     }
 
     private void HandleAuthenticationSuccess(string responseData, object cbObject, AuthenticationRequestCompleted authenticationRequestCompleted)
