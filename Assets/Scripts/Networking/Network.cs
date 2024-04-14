@@ -12,6 +12,8 @@ public class Network : MonoBehaviour
     public delegate void BrainCloudLogOutFailed();
     public delegate void UpdateUsernameRequestCompleted();
     public delegate void UpdateUsernameRequestFailed();
+    public delegate void LeaderboardRequestCompleted(LeaderboardController leaderboard);
+    public delegate void LeaderboardRequestFailed();
 
     public static Network sharedInstance;
 
@@ -207,6 +209,72 @@ public class Network : MonoBehaviour
 
             if (updateUsernameRequestFailed != null)
                 updateUsernameRequestFailed();
+        }
+    }
+
+    public void RequestLeaderboard(string leaderboardId, LeaderboardRequestCompleted leaderboardRequestCompleted = null, LeaderboardRequestFailed leaderboardRequestFailed = null)
+    {
+        RequestLeaderboard(leaderboardId, 0, 9, leaderboardRequestCompleted, leaderboardRequestFailed);
+    }
+
+    public void RequestLeaderboard(string leaderboardId, int startIndex, int endIndex, LeaderboardRequestCompleted leaderboardRequestCompleted = null, LeaderboardRequestFailed leaderboardRequestFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("RequestMainHighScores success: " + responseData);
+
+                // Read the json and update our values
+                JsonData jsonData = JsonMapper.ToObject(responseData);
+                JsonData leaderboard = jsonData["data"]["leaderboard"];
+
+                List<LeaderboardEntry> leaderboardEntriesList = new List<LeaderboardEntry>();
+                int rank = 0;
+                string nickname;
+                long ms = 0;
+                float time = 0.0f;
+                long score;
+
+                if (leaderboard.IsArray)
+                {
+                    for (int i = 0; i < leaderboard.Count; i++)
+                    {
+                        rank = int.Parse(leaderboard[i]["rank"].ToString());
+                        nickname = leaderboard[i]["data"]["nickname"].ToString();
+                        ms = long.Parse(leaderboard[i]["score"].ToString());
+                        time = (float)ms / 1000.0f;
+                        score = long.Parse(leaderboard[i]["score"].ToString());
+
+                        leaderboardEntriesList.Add(new LeaderboardEntry(nickname, rank, time, score));
+                    }
+                }
+
+                LeaderboardController lb = new LeaderboardController(leaderboardId, leaderboardEntriesList);
+
+                if (leaderboardRequestCompleted != null)
+                    leaderboardRequestCompleted(lb);
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("RequestMainHighScores failed: " + statusMessage);
+
+                if (leaderboardRequestFailed != null)
+                    leaderboardRequestFailed();
+            };
+
+            // Make the BrainCloud request
+            brainCloudWrapper.LeaderboardService.GetGlobalLeaderboardPage(leaderboardId, BrainCloud.BrainCloudSocialLeaderboard.SortOrder.HIGH_TO_LOW, startIndex, endIndex, successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("RequestMainHighScores failed: user is not authenticated");
+
+            if (leaderboardRequestFailed != null)
+                leaderboardRequestFailed();
         }
     }
 
