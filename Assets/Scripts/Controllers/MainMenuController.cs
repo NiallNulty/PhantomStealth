@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,6 +20,15 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     private GameObject LeaderboardCanvas;
 
+    [SerializeField]
+    private TMP_InputField usernameInputField;
+
+    [SerializeField]
+    private TMP_InputField passwordInputField;
+
+    private Network.AuthenticationRequestCompleted AuthenticationRequestCompleted;
+    private Network.AuthenticationRequestFailed AuthenticationRequestFailed;
+
     private void Start()
     {
         if (Network.sharedInstance.IsAuthenticated())
@@ -27,7 +37,13 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void HandleAuthentication()
+    public void Set(Network.AuthenticationRequestCompleted authenticationRequestCompleted, Network.AuthenticationRequestFailed authenticationRequestFailed)
+    {
+        AuthenticationRequestCompleted = authenticationRequestCompleted;
+        AuthenticationRequestFailed = authenticationRequestFailed;
+    }
+
+    public void HandleAnonymousAuthentication()
     {
         if (Network.sharedInstance.HasAuthenticatedPreviously())
         {
@@ -36,6 +52,20 @@ public class MainMenuController : MonoBehaviour
         else
         {
             Network.sharedInstance.RequestAnonymousAuthentication();
+        }
+
+        StartCoroutine(WaitToLoadLevel());
+    }
+
+    public void HandleUniversalAuthentication()
+    {
+        if (Network.sharedInstance.HasAuthenticatedPreviously())
+        {
+            Network.sharedInstance.Reconnect();
+        }
+        else
+        {
+            Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, AuthenticationRequestCompleted, AuthenticationRequestFailed);
         }
 
         StartCoroutine(WaitToLoadLevel());
@@ -118,10 +148,11 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void ShowRegisterCanvas()
+    public void ShowRegisterCanvas(Network.AuthenticationRequestCompleted authenticationRequestCompleted = null, Network.AuthenticationRequestFailed authenticationRequestFailed = null)
     {
         try
         {
+            Set(authenticationRequestCompleted, authenticationRequestFailed);
             RegisterCanvas.gameObject.SetActive(true);
         }
         catch (System.Exception)
