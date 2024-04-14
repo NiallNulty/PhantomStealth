@@ -150,7 +150,7 @@ public class Network : MonoBehaviour
         brainCloudWrapper.AuthenticateAnonymous(successCallback, failureCallback);
     }
 
-    public void RequestAuthenticationUniversal(string userID, string password, AuthenticationRequestCompleted authenticationRequestCompleted = null, AuthenticationRequestFailed authenticationRequestFailed = null)
+    public void RequestAuthenticationUniversal(string userID, string password, bool forceCreate, AuthenticationRequestCompleted authenticationRequestCompleted = null, AuthenticationRequestFailed authenticationRequestFailed = null)
     {
         //success
         BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
@@ -170,7 +170,7 @@ public class Network : MonoBehaviour
         };
 
         //Make the BrainCloud request
-        brainCloudWrapper.AuthenticateUniversal(userID, password, true, successCallback, failureCallback);
+        brainCloudWrapper.AuthenticateUniversal(userID, password, forceCreate, successCallback, failureCallback);
     }
 
     public void RequestUpdateUsername(string newUsername, UpdateUsernameRequestCompleted updateUsernameRequestCompleted = null, UpdateUsernameRequestFailed updateUsernameRequestFailed = null)

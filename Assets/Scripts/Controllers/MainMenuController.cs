@@ -77,7 +77,7 @@ public class MainMenuController : MonoBehaviour
         }
         else
         {
-            Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, AuthenticationRequestCompleted, AuthenticationRequestFailed);
+            Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, true, AuthenticationRequestCompleted, AuthenticationRequestFailed);
         }
 
         StartCoroutine(WaitToLoadLevel());
@@ -87,7 +87,7 @@ public class MainMenuController : MonoBehaviour
     {
         Network.sharedInstance.LogOut();
 
-        Network.sharedInstance.RequestAuthenticationUniversal(currentUsernameInputField.text, currentPasswordInputField.text, AuthenticationRequestCompleted, AuthenticationRequestFailed);
+        Network.sharedInstance.RequestAuthenticationUniversal(currentUsernameInputField.text, currentPasswordInputField.text, false, AuthenticationRequestCompleted, AuthenticationRequestFailed);
 
         StartCoroutine(WaitToUpdateUsername());
 
