@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,13 +12,34 @@ public class MainMenuController : MonoBehaviour
     private GameObject LoginCanvas;
 
     [SerializeField]
-    private GameObject RegisterCanvas;
+    private GameObject UpdateUsernameCanvas;
 
     [SerializeField]
     private GameObject ControlsCanvas;
 
     [SerializeField]
     private GameObject LeaderboardCanvas;
+
+    [SerializeField]
+    private TMP_InputField usernameInputField;
+
+    [SerializeField]
+    private TMP_InputField passwordInputField;
+
+    [SerializeField]
+    private TMP_InputField currentUsernameInputField;
+
+    [SerializeField]
+    private TMP_InputField currentPasswordInputField;
+
+    [SerializeField]
+    private TMP_InputField newUsernameInputField;
+
+    private Network.AuthenticationRequestCompleted AuthenticationRequestCompleted;
+    private Network.AuthenticationRequestFailed AuthenticationRequestFailed;
+
+    private Network.UpdateUsernameRequestCompleted UpdateUsernameRequestCompleted;
+    private Network.UpdateUsernameRequestFailed UpdateUsernameRequestFailed;
 
     private void Start()
     {
@@ -27,7 +49,13 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void HandleAuthentication()
+    public void Set(Network.AuthenticationRequestCompleted authenticationRequestCompleted, Network.AuthenticationRequestFailed authenticationRequestFailed)
+    {
+        AuthenticationRequestCompleted = authenticationRequestCompleted;
+        AuthenticationRequestFailed = authenticationRequestFailed;
+    }
+
+    public void HandleAnonymousAuthentication()
     {
         if (Network.sharedInstance.HasAuthenticatedPreviously())
         {
@@ -41,6 +69,31 @@ public class MainMenuController : MonoBehaviour
         StartCoroutine(WaitToLoadLevel());
     }
 
+    public void HandleUniversalAuthentication()
+    {
+        if (Network.sharedInstance.HasAuthenticatedPreviously())
+        {
+            Network.sharedInstance.Reconnect();
+        }
+        else
+        {
+            Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, AuthenticationRequestCompleted, AuthenticationRequestFailed);
+        }
+
+        StartCoroutine(WaitToLoadLevel());
+    }
+
+    public void UpdateUsername()
+    {
+        Network.sharedInstance.LogOut();
+
+        Network.sharedInstance.RequestAuthenticationUniversal(currentUsernameInputField.text, currentPasswordInputField.text, AuthenticationRequestCompleted, AuthenticationRequestFailed);
+
+        StartCoroutine(WaitToUpdateUsername());
+
+        Network.sharedInstance.LogOut();
+    }
+
     //Try every second for 5 seconds to see if user is authenticated
     private IEnumerator WaitToLoadLevel()
     {
@@ -52,6 +105,17 @@ public class MainMenuController : MonoBehaviour
             {
                 LoadLevel1Scene();
             }
+        }
+    }
+
+    //Wait 5 seconds to ensure user credentials are correct before Updating Username
+    private IEnumerator WaitToUpdateUsername()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+
+        if (Network.sharedInstance.IsAuthenticated())
+        {
+            Network.sharedInstance.RequestUpdateUsername(newUsernameInputField.text, UpdateUsernameRequestCompleted, UpdateUsernameRequestFailed);
         }
     }
 
@@ -118,11 +182,11 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void ShowRegisterCanvas()
+    public void ShowUpdateUsernameCanvas()
     {
         try
         {
-            RegisterCanvas.gameObject.SetActive(true);
+            UpdateUsernameCanvas.gameObject.SetActive(true);
         }
         catch (System.Exception)
         {
@@ -131,11 +195,11 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void HideRegisterCanvas()
+    public void HideUpdateUsernameCanvas()
     {
         try
         {
-            RegisterCanvas.gameObject.SetActive(false);
+            UpdateUsernameCanvas.gameObject.SetActive(false);
         }
         catch (System.Exception)
         {

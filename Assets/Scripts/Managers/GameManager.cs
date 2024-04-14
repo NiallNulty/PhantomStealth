@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
 
     public GameState gameState = GameState.Gameplay;
 
+    [SerializeField]
+    private TextMeshProUGUI txtUsername;
+
     public bool collactableFound = false;
 
     [SerializeField]
@@ -38,6 +41,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private TimerController timerController;
+
+    private void Start()
+    {
+        txtUsername.text = Network.sharedInstance.GetUsername();
+    }
 
     public void ShowCollectableNotification()
     {

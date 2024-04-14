@@ -149,6 +149,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1137033333056149561, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
   m_PrefabInstance: {fileID: 6528901039770041025}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &996576769 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1043977406514504101, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+  m_PrefabInstance: {fileID: 8685198999909102079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1161047816 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1506734869979462928, guid: 5529d1f03bf41da409cfa37c71e92aea, type: 3}
@@ -159,6 +170,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5305662952552398407, guid: 46fb3ebadd7d0f9438071018c2609926, type: 3}
   m_PrefabInstance: {fileID: 7309450509350876373}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1408222814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 175120799568281513, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+  m_PrefabInstance: {fileID: 8685198999909102079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1615267524
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +454,18 @@ PrefabInstance:
       propertyPath: LeaderboardCanvas
       value: 
       objectReference: {fileID: 1161047816}
+    - target: {fileID: 4325781408121962906, guid: a4767212ac8e796459b899caaef928ff, type: 3}
+      propertyPath: passwordInputField
+      value: 
+      objectReference: {fileID: 996576769}
+    - target: {fileID: 4325781408121962906, guid: a4767212ac8e796459b899caaef928ff, type: 3}
+      propertyPath: usernameInputField
+      value: 
+      objectReference: {fileID: 1408222814}
+    - target: {fileID: 4325781408121962906, guid: a4767212ac8e796459b899caaef928ff, type: 3}
+      propertyPath: UpdateUsernameCanvas
+      value: 
+      objectReference: {fileID: 483168723}
     - target: {fileID: 7850373775065972585, guid: a4767212ac8e796459b899caaef928ff, type: 3}
       propertyPath: m_Name
       value: MainMenuController
@@ -507,40 +541,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 671095470695985724, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 671095470695985724, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 671095470695985724, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 701652098}
-    - target: {fileID: 671095470695985724, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 671095470695985724, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HandleAuthentication
-      objectReference: {fileID: 0}
-    - target: {fileID: 671095470695985724, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainMenuController, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 671095470695985724, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 1137033333056149561, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
       propertyPath: m_Name
       value: MainCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 1137033333056149561, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3710638163660628392, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -641,10 +647,6 @@ PrefabInstance:
     - target: {fileID: 5371516606513439622, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6287600236687165211, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7054857988830128542, guid: 4ee289910a966ba47ae29ff53278560c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -959,7 +961,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5320952126655120520, guid: 29c3a5b8a095baf4cae1a37943f7deaa, type: 3}
       propertyPath: m_Name
-      value: RegisterCanvas
+      value: UpdateUsernameCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5320952126655120520, guid: 29c3a5b8a095baf4cae1a37943f7deaa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6871679799699651469, guid: 29c3a5b8a095baf4cae1a37943f7deaa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -969,6 +975,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 701652098}
+    - target: {fileID: 6871679799699651469, guid: 29c3a5b8a095baf4cae1a37943f7deaa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HideUpdateUsernameCanvas
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1178,6 +1188,46 @@ PrefabInstance:
     - target: {fileID: 2709144790841743844, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 701652098}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleUniversalAuthentication
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MainMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MainMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842088641112992785, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3341096625077091699, guid: 4264a853f92575f40a88b978a107a2e3, type: 3}
       propertyPath: m_Name

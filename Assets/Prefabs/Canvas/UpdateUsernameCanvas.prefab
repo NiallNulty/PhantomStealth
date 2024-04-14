@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Username...
+  m_text: New Username...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 7936102785981567202}
   - component: {fileID: 396075763869459589}
   m_Layer: 5
-  m_Name: inputFieldUsername
+  m_Name: inputFieldNewUsername
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -529,12 +529,12 @@ GameObject:
   - component: {fileID: 1121117398096632828}
   - component: {fileID: 939007596577260431}
   m_Layer: 5
-  m_Name: RegisterCanvas
+  m_Name: UpdateUsernameCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &360767941015342822
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1275,7 +1275,7 @@ GameObject:
   - component: {fileID: 7748680298774222286}
   - component: {fileID: 5309649976812625319}
   m_Layer: 5
-  m_Name: inputFieldEmail
+  m_Name: inputFieldCurrentUsername
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1636,9 +1636,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Register
-
-'
+  m_text: Update
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1825,7 +1823,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Email...
+  m_text: Current Username...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1927,7 +1925,7 @@ GameObject:
   - component: {fileID: 1072178101764572106}
   - component: {fileID: 855815176569821685}
   m_Layer: 5
-  m_Name: btnRegister
+  m_Name: btnUpdateUsername
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
