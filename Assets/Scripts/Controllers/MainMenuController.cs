@@ -35,6 +35,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     private TMP_InputField newUsernameInputField;
 
+    [SerializeField]
+    private TextMeshProUGUI[] scores = new TextMeshProUGUI[5];
+
     private Network.AuthenticationRequestCompleted AuthenticationRequestCompleted;
     private Network.AuthenticationRequestFailed AuthenticationRequestFailed;
 
@@ -117,6 +120,32 @@ public class MainMenuController : MonoBehaviour
         {
             Network.sharedInstance.RequestUpdateUsername(newUsernameInputField.text, UpdateUsernameRequestCompleted, UpdateUsernameRequestFailed);
         }
+    }
+
+
+    private IEnumerator WaitToShowLeaderboard()
+    {
+        Network.sharedInstance.RequestAnonymousAuthentication();
+        yield return new WaitForSecondsRealtime(2f);
+        
+        Network.sharedInstance.RequestLeaderboard("Main", 0, 5, OnLeaderboardRequestCompleted);
+        yield return new WaitForSecondsRealtime(2f);
+
+        LeaderboardController leaderboard = LeaderboardManager.sharedInstance.GetLeaderboardByName("Main");
+
+        if (leaderboard != null)
+        {
+            for (int i = 0; i < leaderboard.GetCount(); i++)
+            {
+                LeaderboardEntry leaderboardEntry = leaderboard.GetLeaderboardEntryAtIndex(i);
+                scores[i].text = (i + 1).ToString() + ". Name: " + leaderboardEntry.Nickname.PadRight(20) + "Score: " + leaderboardEntry.Score;
+            }
+
+        }
+
+        LeaderboardCanvas.gameObject.SetActive(true);
+
+        Network.sharedInstance.LogOut();
     }
 
     public void LoadLevel1Scene()
@@ -233,11 +262,18 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
+    private void OnLeaderboardRequestCompleted(LeaderboardController leaderboard)
+    {
+        LeaderboardManager.sharedInstance.AddLeaderboard(leaderboard);
+    }
+
     public void ShowLeaderboardCanvas()
     {
         try
         {
-            LeaderboardCanvas.gameObject.SetActive(true);
+            Network.sharedInstance.RequestAnonymousAuthentication();
+
+            StartCoroutine(WaitToShowLeaderboard());
         }
         catch (System.Exception)
         {
