@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,9 +10,15 @@ public class PlayerController : MonoBehaviour
     private float speedY;
     private Rigidbody2D rb;
 
+    public bool isFinished = false;
+
+    [SerializeField]
+    public SerializableList<Vector3> playerPath = new SerializableList<Vector3>();
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        StartCoroutine(SetPlayerPathPoints());
     }
 
     // Update is called once per frame
@@ -48,6 +57,18 @@ public class PlayerController : MonoBehaviour
         {
 
             throw;
+        }
+    }
+
+    private IEnumerator SetPlayerPathPoints()
+    {
+        yield return new WaitForSeconds(.1f);
+
+        playerPath.playerPath.Add(transform.position);
+
+        if (!isFinished)
+        {
+            StartCoroutine(SetPlayerPathPoints());
         }
     }
 }
