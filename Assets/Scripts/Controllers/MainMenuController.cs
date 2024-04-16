@@ -1,12 +1,13 @@
 using System.Collections;
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-	[SerializeField]
-	private GameObject MainCanvas;
+    [SerializeField]
+    private GameObject MainCanvas;
 
     [SerializeField]
     private GameObject LoginCanvas;
@@ -46,10 +47,36 @@ public class MainMenuController : MonoBehaviour
 
     private void Start()
     {
-        if (Network.sharedInstance.IsAuthenticated())
+        UnityEngine.SceneManagement.Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "MainMenuScene")
         {
-            Network.sharedInstance.LogOut();
+            if (Network.sharedInstance.IsAuthenticated())
+            {
+                Network.sharedInstance.LogOut();
+            }
         }
+    }
+
+    public void ChangeGhostPathValue()
+    {
+        if (Globals.GhostPathEnabled)
+        {
+            DisableGhostPath();
+        }
+        else
+        {
+            EnableGhostPath();
+        }
+    }
+
+    public void DisableGhostPath()
+    {
+        Globals.GhostPathEnabled = false;
+    }
+
+    public void EnableGhostPath()
+    {
+        Globals.GhostPathEnabled = true;
     }
 
     public void Set(Network.AuthenticationRequestCompleted authenticationRequestCompleted, Network.AuthenticationRequestFailed authenticationRequestFailed)
@@ -83,7 +110,12 @@ public class MainMenuController : MonoBehaviour
             Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, true, AuthenticationRequestCompleted, AuthenticationRequestFailed);
         }
 
-        StartCoroutine(WaitToLoadLevel());
+        UnityEngine.SceneManagement.Scene scene = SceneManager.GetActiveScene();
+
+        if (scene.name == "MainMenuScene")
+        {
+            StartCoroutine(WaitToLoadLevel());
+        }
     }
 
     public void UpdateUsername()
@@ -127,7 +159,7 @@ public class MainMenuController : MonoBehaviour
     {
         Network.sharedInstance.RequestAnonymousAuthentication();
         yield return new WaitForSecondsRealtime(2f);
-        
+
         Network.sharedInstance.RequestLeaderboard("Main", 0, 5, OnLeaderboardRequestCompleted);
         yield return new WaitForSecondsRealtime(2f);
 
@@ -186,17 +218,17 @@ public class MainMenuController : MonoBehaviour
     }
 
     public void ShowLoginCanvas()
-	{
-		try
-		{
-			LoginCanvas.gameObject.SetActive(true);
-		}
-		catch (System.Exception)
-		{
+    {
+        try
+        {
+            LoginCanvas.gameObject.SetActive(true);
+        }
+        catch (System.Exception)
+        {
 
-			throw;
-		}
-	}
+            throw;
+        }
+    }
 
     public void HideLoginCanvas()
     {
@@ -296,14 +328,14 @@ public class MainMenuController : MonoBehaviour
 
     public void CloseGame()
     {
-		try
-		{
-			Application.Quit();
-		}
-		catch (System.Exception)
-		{
+        try
+        {
+            Application.Quit();
+        }
+        catch (System.Exception)
+        {
 
-			throw;
-		}
+            throw;
+        }
     }
 }

@@ -1,6 +1,7 @@
 using BrainCloud.LitJson;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using static Network;
 
@@ -14,6 +15,12 @@ public class Network : MonoBehaviour
     public delegate void UpdateUsernameRequestFailed();
     public delegate void LeaderboardRequestCompleted(LeaderboardController leaderboard);
     public delegate void LeaderboardRequestFailed();
+    public delegate void RequestUserEntityDataCompleted(UserData userData);
+    public delegate void RequestUserEntityDataFailed();
+    public delegate void CreateUserEntityDataCompleted();
+    public delegate void CreateUserEntityDataFailed();
+    public delegate void UpdateUserEntityDataCompleted();
+    public delegate void UpdateUserEntityDataFailed();
 
     public static Network sharedInstance;
 
@@ -24,7 +31,7 @@ public class Network : MonoBehaviour
     void Awake()
     {
         if (sharedInstance == null)
-        { 
+        {
             sharedInstance = this;
 
             DontDestroyOnLoad(this.gameObject);
@@ -150,6 +157,7 @@ public class Network : MonoBehaviour
 
         //Make BranCloud Request
         brainCloudWrapper.AuthenticateAnonymous(successCallback, failureCallback);
+        Globals.isAnonymous = true;
     }
 
     public void RequestAuthenticationUniversal(string userID, string password, bool forceCreate, AuthenticationRequestCompleted authenticationRequestCompleted = null, AuthenticationRequestFailed authenticationRequestFailed = null)
@@ -173,6 +181,7 @@ public class Network : MonoBehaviour
 
         //Make the BrainCloud request
         brainCloudWrapper.AuthenticateUniversal(userID, password, forceCreate, successCallback, failureCallback);
+        Globals.isAnonymous = false;
     }
 
     public void RequestUpdateUsername(string newUsername, UpdateUsernameRequestCompleted updateUsernameRequestCompleted = null, UpdateUsernameRequestFailed updateUsernameRequestFailed = null)
@@ -275,6 +284,158 @@ public class Network : MonoBehaviour
 
             if (leaderboardRequestFailed != null)
                 leaderboardRequestFailed();
+        }
+    }
+
+    public void RequestUserEntityData(RequestUserEntityDataCompleted requestUserEntityDataCompleted = null, RequestUserEntityDataFailed requestUserEntityDataFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("RequestUserEntityData success: " + responseData);
+
+                JsonData jsonData = JsonMapper.ToObject(responseData);
+                JsonData entities = jsonData["data"]["entities"];
+
+                UserData userData = null;
+                List<Vector3> playerPathList = new List<Vector3>();
+
+
+                if (entities.IsArray && entities.Count > 0)
+                {
+                    string entityID = entities[0]["entityId"].ToString();
+                    string entityType = entities[0]["entityType"].ToString();
+
+                    userData = new UserData(entityID, entityType);
+
+                    if (!Globals.isNewUser)
+                    {
+                        JsonData playerPathArray = JsonMapper.ToObject(entities[0]["data"]["playerPath"].ToJson());
+
+
+                        for (int i = 0; i < playerPathArray.Count; i++)
+                        {
+                            float x = float.Parse(playerPathArray[i][0].ToString());
+                            float y = float.Parse(playerPathArray[i][1].ToString());
+                            float z = float.Parse(playerPathArray[i][2].ToString());
+
+                            playerPathList.Add(new Vector3(x, y, z));
+                        }
+                    }
+
+                    Globals.isNewUser = false;
+
+                    if (userData.EntityID != null)
+                    {
+                        Globals.EntityID = userData.EntityID;
+                    }
+
+                    if (playerPathList != null || playerPathList.Count > 0)
+                    {
+                        Globals.GhostPath = playerPathList;
+                    }
+
+                }
+
+                if (requestUserEntityDataCompleted != null) 
+                requestUserEntityDataCompleted(userData);
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("RequestUserEntityData failed: " + statusMessage);
+
+                if (requestUserEntityDataFailed != null)
+                    requestUserEntityDataFailed();
+            };
+
+            // Make the BrainCloud request
+            brainCloudWrapper.EntityService.GetEntitiesByType("userProgress", successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("RequestUserEntityData failed: user is not authenticated");
+
+            if (requestUserEntityDataFailed != null)
+                requestUserEntityDataFailed();
+        }
+    }
+
+    public void CreateUserEntityData(CreateUserEntityDataCompleted createUserEntityDataCompleted = null, CreateUserEntityDataFailed createUserEntityDataFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("CreateUserEntityData success: " + responseData);
+
+                if (createUserEntityDataCompleted != null)
+                    createUserEntityDataCompleted();
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("CreateUserEntityData failed: " + statusMessage);
+
+                if (createUserEntityDataFailed != null)
+                    createUserEntityDataFailed();
+            };
+
+            // Make the BrainCloud request
+            brainCloudWrapper.EntityService.CreateEntity("userProgress",
+                                                    "{\"playerPath\" : \"test\"}",
+                                                    "{\"other\":0}",
+                                                    successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("CreateUserEntityData failed: user is not authenticated");
+
+            if (createUserEntityDataFailed != null)
+                createUserEntityDataFailed();
+        }
+    }
+
+
+    public void UpdateUserEntityData(string entityID, string entityType, string jsonData, UpdateUserEntityDataCompleted updateUserEntityDataCompleted = null, UpdateUserEntityDataFailed updateUserEntityDataFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("UpdateUserEntityData success: " + responseData);
+
+                if (updateUserEntityDataCompleted != null)
+                    updateUserEntityDataCompleted();
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("EntityID: " + entityID);
+                LogManager.Log("EntityType: " + entityType);
+                LogManager.Log("JsonDAta: " + jsonData);
+                LogManager.Log("UpdateUserEntityData failed: " + statusMessage);
+
+                if (updateUserEntityDataFailed != null)
+                    updateUserEntityDataFailed();
+            };
+
+            // Make the BrainCloud request
+            brainCloudWrapper.EntityService.UpdateEntity(entityID, entityType, jsonData, "{\"other\":0}", -1, successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("UpdateUserEntityData failed: user is not authenticated");
+
+            if (updateUserEntityDataFailed != null)
+                updateUserEntityDataFailed();
         }
     }
 

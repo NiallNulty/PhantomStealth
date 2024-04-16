@@ -42,9 +42,17 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TimerController timerController;
 
+    [SerializeField]
+    private GameObject ghostPath;
+
     private void Start()
     {
         txtUsername.text = Network.sharedInstance.GetUsername();
+
+        if (Globals.GhostPathEnabled)
+        {
+            ghostPath.SetActive(true);
+        }
     }
 
     public void ShowCollectableNotification()
