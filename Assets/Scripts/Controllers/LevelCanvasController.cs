@@ -20,6 +20,8 @@ public class LevelCanvasController : MonoBehaviour
 
     [SerializeField] private GameObject AuthenticatingFailedCanvas;
 
+    [SerializeField] private GameObject gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,6 +99,9 @@ public class LevelCanvasController : MonoBehaviour
         }
         else
         {
+            Network.PostScoreRequestCompleted postScoreRequestCompleted = null;
+            Network.PostScoreRequestFailed postScoreRequestFailed = null;
+            Network.sharedInstance.PostScoreToLeaderboard("Main", gameManager.GetComponent<GameManager>().totalPoints, usernameInputField.text, postScoreRequestCompleted, postScoreRequestFailed);
             DisableRegisterCanvas();
         }
 
