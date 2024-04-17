@@ -1639,7 +1639,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8995121316556249556, guid: 1c5eed00f8555ec49bb586ba12f9d191, type: 3}
   m_PrefabInstance: {fileID: 3206898816260666203}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 3206898816260666204}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72fa8be58eed90b4ababf1b997fcc444, type: 3}
@@ -3265,6 +3265,7 @@ MonoBehaviour:
   btnRegister: {fileID: 1660748989}
   AuthenticatingCanvas: {fileID: 730116521}
   AuthenticatingFailedCanvas: {fileID: 519685353}
+  gameManager: {fileID: 3206898816260666204}
 --- !u!1001 &3206898816260666203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3358,6 +3359,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c5eed00f8555ec49bb586ba12f9d191, type: 3}
+--- !u!1 &3206898816260666204 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 44072055479658842, guid: 1c5eed00f8555ec49bb586ba12f9d191, type: 3}
+  m_PrefabInstance: {fileID: 3206898816260666203}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3977630748352583006
 PrefabInstance:
   m_ObjectHideFlags: 0

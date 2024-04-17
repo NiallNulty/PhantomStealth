@@ -45,6 +45,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject ghostPath;
 
+    [HideInInspector]
+    public int totalPoints;
+
     private Network.PostScoreRequestCompleted postScoreRequestCompleted;
     private Network.PostScoreRequestFailed postScoreRequestFailed;
 
@@ -107,6 +110,8 @@ public class GameManager : MonoBehaviour
             }
 
             txtTotalPoints.text = "Total Points: " + points;
+
+            totalPoints = points;
 
             if (!string.IsNullOrEmpty(txtUsername.text))
             {
