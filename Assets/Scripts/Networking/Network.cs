@@ -366,6 +366,11 @@ public class Network : MonoBehaviour
 
                     userData = new UserData(entityID, entityType);
 
+                    if (entities[0]["data"]["playerPath"].ToString().Trim() == "test")
+                    {
+                        Globals.isNewUser = true;
+                    }
+
                     if (!Globals.isNewUser)
                     {
                         JsonData playerPathArray = JsonMapper.ToObject(entities[0]["data"]["playerPath"].ToJson());

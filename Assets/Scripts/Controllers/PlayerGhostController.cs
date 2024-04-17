@@ -21,7 +21,14 @@ public class PlayerGhostController : MonoBehaviour
         if (waypoints == null || waypoints.Count == 0)
         {
             waypoints = Globals.GhostPath;
+            gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            transform.GetChild(0).gameObject.SetActive(false);
             return;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            transform.GetChild(0).gameObject.SetActive(true);
         }
 
         if (canMove)
