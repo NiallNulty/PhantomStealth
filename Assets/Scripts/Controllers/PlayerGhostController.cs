@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.SceneManagement;
 
-public class PathController : MonoBehaviour
+public class PlayerGhostController : MonoBehaviour
 {
     [SerializeField]
     private List<Vector3> waypoints = new List<Vector3>();
