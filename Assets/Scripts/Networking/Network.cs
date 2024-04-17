@@ -138,6 +138,7 @@ public class Network : MonoBehaviour
             LogManager.Log("Universal authentication success: " + responseData);
             HandleAuthenticationSuccess(responseData, cbObject, authenticationRequestCompleted);
             username = userID;
+            Globals.isAnonymous = false;
         };
 
         //failure
@@ -151,7 +152,6 @@ public class Network : MonoBehaviour
 
         //Make the BrainCloud request
         brainCloudWrapper.AuthenticateUniversal(userID, password, forceCreate, successCallback, failureCallback);
-        Globals.isAnonymous = false;
     }
 
     public void LogOut(BrainCloudLogOutCompleted brainCloudLogOutCompleted = null, BrainCloudLogOutFailed brainCloudLogOutFailed = null)

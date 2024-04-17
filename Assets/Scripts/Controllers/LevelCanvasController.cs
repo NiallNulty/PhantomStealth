@@ -49,7 +49,15 @@ public class LevelCanvasController : MonoBehaviour
         RegisterCanvas.SetActive(false);
         Network.sharedInstance.CreateUserEntityData();
         StartCoroutine(WaitToGetEntity());
-        btnRegister.SetActive(false);
+
+        if (Globals.isAnonymous)
+        {
+            btnRegister.SetActive(true);
+        }
+        else
+        {
+            btnRegister.SetActive(false);
+        }
     }
 
     private IEnumerator WaitToGetEntity()
