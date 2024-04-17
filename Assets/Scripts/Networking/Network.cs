@@ -57,6 +57,7 @@ public class Network : MonoBehaviour
         brainCloudWrapper.Logout(true);
     }
 
+    #region Authentication
     public bool HasAuthenticatedPreviously()
     {
         return brainCloudWrapper.GetStoredProfileId() != string.Empty && brainCloudWrapper.GetStoredAnonymousId() != string.Empty;
@@ -70,47 +71,17 @@ public class Network : MonoBehaviour
         return isAuthenticated;
     }
 
-    public string GetUsername()
+    private void HandleAuthenticationSuccess(string responseData, object cbObject, AuthenticationRequestCompleted authenticationRequestCompleted)
     {
-        return username;
-    }
 
-    public void LogOut(BrainCloudLogOutCompleted brainCloudLogOutCompleted = null, BrainCloudLogOutFailed brainCloudLogOutFailed = null)
-    {
-        if (IsAuthenticated())
+        JsonData jsonData = JsonMapper.ToObject(responseData);
+        username = jsonData["data"]["playerName"].ToString();
+
+        if (authenticationRequestCompleted != null)
         {
-            // Success 
-            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
-            {
-                LogManager.Log("LogOut success: " + responseData);
-
-                username = string.Empty;
-
-                if (brainCloudLogOutCompleted != null)
-                    brainCloudLogOutCompleted();
-            };
-
-            // Failure
-            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
-            {
-                LogManager.Log("BrainCloud Logout failed: " + statusMessage);
-
-                if (brainCloudLogOutFailed != null)
-                    brainCloudLogOutFailed();
-            };
-
-            // Make the BrainCloud request
-            brainCloudWrapper.Logout(true, successCallback, failureCallback);
-        }
-        else
-        {
-            Debug.Log("BrainCloud Logout failed: user is not authenticated");
-
-            if (brainCloudLogOutFailed != null)
-                brainCloudLogOutFailed();
+            authenticationRequestCompleted();
         }
     }
-
 
     public void Reconnect(AuthenticationRequestCompleted authenticationRequestCompleted = null, AuthenticationRequestFailed authenticationRequestFailed = null)
     {
@@ -183,6 +154,48 @@ public class Network : MonoBehaviour
         Globals.isAnonymous = false;
     }
 
+    public void LogOut(BrainCloudLogOutCompleted brainCloudLogOutCompleted = null, BrainCloudLogOutFailed brainCloudLogOutFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success 
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("LogOut success: " + responseData);
+
+                username = string.Empty;
+
+                if (brainCloudLogOutCompleted != null)
+                    brainCloudLogOutCompleted();
+            };
+
+            // Failure
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("BrainCloud Logout failed: " + statusMessage);
+
+                if (brainCloudLogOutFailed != null)
+                    brainCloudLogOutFailed();
+            };
+
+            // Make the BrainCloud request
+            brainCloudWrapper.Logout(true, successCallback, failureCallback);
+        }
+        else
+        {
+            Debug.Log("BrainCloud Logout failed: user is not authenticated");
+
+            if (brainCloudLogOutFailed != null)
+                brainCloudLogOutFailed();
+        }
+    }
+    #endregion
+
+    #region Username
+    public string GetUsername()
+    {
+        return username;
+    }
     public void RequestUpdateUsername(string newUsername, UpdateUsernameRequestCompleted updateUsernameRequestCompleted = null, UpdateUsernameRequestFailed updateUsernameRequestFailed = null)
     {
         if (IsAuthenticated())
@@ -219,7 +232,9 @@ public class Network : MonoBehaviour
                 updateUsernameRequestFailed();
         }
     }
+    #endregion
 
+    #region Leaderboard
     public void RequestLeaderboard(string leaderboardId, LeaderboardRequestCompleted leaderboardRequestCompleted = null, LeaderboardRequestFailed leaderboardRequestFailed = null)
     {
         RequestLeaderboard(leaderboardId, 0, 9, leaderboardRequestCompleted, leaderboardRequestFailed);
@@ -286,6 +301,48 @@ public class Network : MonoBehaviour
         }
     }
 
+    public void PostScoreToLeaderboard(string leaderboardID, float time, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
+    {
+        PostScoreToLeaderboard(leaderboardID, time, GetUsername(), postScoreRequestCompleted, postScoreRequestFailed);
+    }
+
+    public void PostScoreToLeaderboard(string leaderboardID, float time, string nickname, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("PostScoreToLeaderboard success: " + responseData);
+                if (postScoreRequestCompleted != null)
+                    postScoreRequestCompleted();
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("PostScoreToLeaderboard failed: " + statusMessage);
+                if (postScoreRequestFailed != null)
+                    postScoreRequestFailed();
+            };
+
+            // Make the BrainCloud request
+            long score = (long)(time);
+            string jsonOtherData = "{\"nickname\":\"" + nickname + "\"}";
+            brainCloudWrapper.LeaderboardService.PostScoreToLeaderboard(leaderboardID, score, jsonOtherData, successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("PostScoreToLeaderboard failed: user is not authenticated");
+
+            if (postScoreRequestFailed != null)
+                postScoreRequestFailed();
+        }
+    }
+
+    #endregion
+
+    #region User Entities
     public void RequestUserEntityData(RequestUserEntityDataCompleted requestUserEntityDataCompleted = null, RequestUserEntityDataFailed requestUserEntityDataFailed = null)
     {
         if (IsAuthenticated())
@@ -363,44 +420,7 @@ public class Network : MonoBehaviour
         }
     }
 
-    public void PostScoreToLeaderboard(string leaderboardID, float time, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
-    {
-        PostScoreToLeaderboard(leaderboardID, time, GetUsername(), postScoreRequestCompleted, postScoreRequestFailed);
-    }
 
-    public void PostScoreToLeaderboard(string leaderboardID, float time, string nickname, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
-    {
-        if (IsAuthenticated())
-        {
-            // Success callback lambda
-            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
-            {
-                LogManager.Log("PostScoreToLeaderboard success: " + responseData);
-                if (postScoreRequestCompleted != null)
-                    postScoreRequestCompleted();
-            };
-
-            // Failure callback lambda
-            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
-            {
-                LogManager.Log("PostScoreToLeaderboard failed: " + statusMessage);
-                if (postScoreRequestFailed != null)
-                    postScoreRequestFailed();
-            };
-
-            // Make the BrainCloud request
-            long score = (long)(time);
-            string jsonOtherData = "{\"nickname\":\"" + nickname + "\"}";
-            brainCloudWrapper.LeaderboardService.PostScoreToLeaderboard(leaderboardID, score, jsonOtherData, successCallback, failureCallback);
-        }
-        else
-        {
-            LogManager.Log("PostScoreToLeaderboard failed: user is not authenticated");
-
-            if (postScoreRequestFailed != null)
-                postScoreRequestFailed();
-        }
-    }
 
     public void CreateUserEntityData(CreateUserEntityDataCompleted createUserEntityDataCompleted = null, CreateUserEntityDataFailed createUserEntityDataFailed = null)
     {
@@ -473,24 +493,6 @@ public class Network : MonoBehaviour
                 updateUserEntityDataFailed();
         }
     }
+    #endregion
 
-
-
-
-
-
-
-
-
-    private void HandleAuthenticationSuccess(string responseData, object cbObject, AuthenticationRequestCompleted authenticationRequestCompleted)
-    {
-
-        JsonData jsonData = JsonMapper.ToObject(responseData);
-        username = jsonData["data"]["playerName"].ToString();
-
-        if (authenticationRequestCompleted != null)
-        {
-            authenticationRequestCompleted();
-        }
-    }
 }
