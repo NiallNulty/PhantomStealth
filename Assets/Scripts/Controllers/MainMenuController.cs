@@ -154,8 +154,9 @@ public class MainMenuController : MonoBehaviour
         else
         {
             AuthenticatingFailedCanvas.SetActive(true);
+            ShowMainCanvas();
         }
-        
+
         AuthenticatingCanvas.SetActive(false);
 
         LeaderboardController leaderboard = LeaderboardManager.sharedInstance.GetLeaderboardByName("Main");
@@ -167,9 +168,9 @@ public class MainMenuController : MonoBehaviour
                 LeaderboardEntry leaderboardEntry = leaderboard.GetLeaderboardEntryAtIndex(i);
                 scores[i].text = (i + 1).ToString() + ". Name: " + leaderboardEntry.Nickname.PadRight(20) + "Score: " + leaderboardEntry.Score;
             }
+            
+            LeaderboardCanvas.gameObject.SetActive(true);
         }
-
-        LeaderboardCanvas.gameObject.SetActive(true);
 
         Network.sharedInstance.LogOut();
     }
