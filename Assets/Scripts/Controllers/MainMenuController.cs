@@ -15,6 +15,10 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField] private GameObject LeaderboardCanvas;
 
+    [SerializeField] private GameObject AuthenticatingCanvas;
+
+    [SerializeField] private GameObject AuthenticatingFailedCanvas;
+
     [SerializeField] private TMP_InputField usernameInputField;
 
     [SerializeField] private TMP_InputField passwordInputField;
@@ -65,6 +69,8 @@ public class MainMenuController : MonoBehaviour
 
     public void HandleAnonymousAuthentication()
     {
+        AuthenticatingCanvas.SetActive(true);
+
         if (Network.sharedInstance.HasAuthenticatedPreviously())
         {
             Network.sharedInstance.Reconnect();
@@ -97,6 +103,8 @@ public class MainMenuController : MonoBehaviour
     //Try every second for 5 seconds to see if user is authenticated
     private IEnumerator WaitToLoadLevel()
     {
+        AuthenticatingCanvas.SetActive(true);
+
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSecondsRealtime(1f);
@@ -106,27 +114,49 @@ public class MainMenuController : MonoBehaviour
                 LoadLevel1Scene();
             }
         }
+
+        AuthenticatingCanvas.SetActive(false);
+        AuthenticatingFailedCanvas.SetActive(true);
     }
 
     //Wait 5 seconds to ensure user credentials are correct before Updating Username
     private IEnumerator WaitToUpdateUsername()
     {
+        AuthenticatingCanvas.SetActive(true);
+
         yield return new WaitForSecondsRealtime(5f);
 
         if (Network.sharedInstance.IsAuthenticated())
         {
             Network.sharedInstance.RequestUpdateUsername(newUsernameInputField.text, UpdateUsernameRequestCompleted, UpdateUsernameRequestFailed);
         }
+        else
+        {
+            AuthenticatingFailedCanvas.SetActive(true);
+        }
+
+        AuthenticatingCanvas.SetActive(false);
     }
 
 
     private IEnumerator WaitToShowLeaderboard()
     {
+        AuthenticatingCanvas.SetActive(true);
+
         Network.sharedInstance.RequestAnonymousAuthentication();
         yield return new WaitForSecondsRealtime(2f);
 
-        Network.sharedInstance.RequestLeaderboard("Main", 0, 5, OnLeaderboardRequestCompleted);
-        yield return new WaitForSecondsRealtime(2f);
+        if (Network.sharedInstance.IsAuthenticated())
+        {
+            Network.sharedInstance.RequestLeaderboard("Main", 0, 5, OnLeaderboardRequestCompleted);
+            yield return new WaitForSecondsRealtime(2f);
+        }
+        else
+        {
+            AuthenticatingFailedCanvas.SetActive(true);
+        }
+        
+        AuthenticatingCanvas.SetActive(false);
 
         LeaderboardController leaderboard = LeaderboardManager.sharedInstance.GetLeaderboardByName("Main");
 
