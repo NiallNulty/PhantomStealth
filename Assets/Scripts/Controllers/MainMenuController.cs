@@ -1,43 +1,31 @@
 using System.Collections;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject MainCanvas;
+    [SerializeField] private GameObject MainCanvas;
 
-    [SerializeField]
-    private GameObject LoginCanvas;
+    [SerializeField] private GameObject LoginCanvas;
 
-    [SerializeField]
-    private GameObject UpdateUsernameCanvas;
+    [SerializeField] private GameObject UpdateUsernameCanvas;
 
-    [SerializeField]
-    private GameObject ControlsCanvas;
+    [SerializeField] private GameObject ControlsCanvas;
 
-    [SerializeField]
-    private GameObject LeaderboardCanvas;
+    [SerializeField] private GameObject LeaderboardCanvas;
 
-    [SerializeField]
-    private TMP_InputField usernameInputField;
+    [SerializeField] private TMP_InputField usernameInputField;
 
-    [SerializeField]
-    private TMP_InputField passwordInputField;
+    [SerializeField] private TMP_InputField passwordInputField;
 
-    [SerializeField]
-    private TMP_InputField currentUsernameInputField;
+    [SerializeField] private TMP_InputField currentUsernameInputField;
 
-    [SerializeField]
-    private TMP_InputField currentPasswordInputField;
+    [SerializeField] private TMP_InputField currentPasswordInputField;
 
-    [SerializeField]
-    private TMP_InputField newUsernameInputField;
+    [SerializeField] private TMP_InputField newUsernameInputField;
 
-    [SerializeField]
-    private TextMeshProUGUI[] scores = new TextMeshProUGUI[5];
+    [SerializeField] private TextMeshProUGUI[] scores = new TextMeshProUGUI[5];
 
     private Network.AuthenticationRequestCompleted AuthenticationRequestCompleted;
     private Network.AuthenticationRequestFailed AuthenticationRequestFailed;
@@ -47,17 +35,13 @@ public class MainMenuController : MonoBehaviour
 
     private void Start()
     {
-        UnityEngine.SceneManagement.Scene scene = SceneManager.GetActiveScene();
-        if (scene.name == "MainMenuScene")
+        if (Network.sharedInstance.IsAuthenticated())
         {
-            if (Network.sharedInstance.IsAuthenticated())
-            {
-                Network.sharedInstance.LogOut();
-            }
+            Network.sharedInstance.LogOut();
         }
     }
 
-    public void ChangeGhostPathValue()
+    public void ChangeGhostPathEnabledValue()
     {
         if (Globals.GhostPathEnabled)
         {
@@ -79,12 +63,6 @@ public class MainMenuController : MonoBehaviour
         Globals.GhostPathEnabled = true;
     }
 
-    public void Set(Network.AuthenticationRequestCompleted authenticationRequestCompleted, Network.AuthenticationRequestFailed authenticationRequestFailed)
-    {
-        AuthenticationRequestCompleted = authenticationRequestCompleted;
-        AuthenticationRequestFailed = authenticationRequestFailed;
-    }
-
     public void HandleAnonymousAuthentication()
     {
         if (Network.sharedInstance.HasAuthenticatedPreviously())
@@ -101,21 +79,8 @@ public class MainMenuController : MonoBehaviour
 
     public void HandleUniversalAuthentication()
     {
-       // if (Network.sharedInstance.HasAuthenticatedPreviously())
-        //{
-        //    Network.sharedInstance.Reconnect();
-        //}
-        //else
-        {
-            Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, true, AuthenticationRequestCompleted, AuthenticationRequestFailed);
-        }
-
-        UnityEngine.SceneManagement.Scene scene = SceneManager.GetActiveScene();
-
-        if (scene.name == "MainMenuScene")
-        {
-            StartCoroutine(WaitToLoadLevel());
-        }
+        Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, true, AuthenticationRequestCompleted, AuthenticationRequestFailed);
+        StartCoroutine(WaitToLoadLevel());
     }
 
     public void UpdateUsername()
@@ -172,7 +137,6 @@ public class MainMenuController : MonoBehaviour
                 LeaderboardEntry leaderboardEntry = leaderboard.GetLeaderboardEntryAtIndex(i);
                 scores[i].text = (i + 1).ToString() + ". Name: " + leaderboardEntry.Nickname.PadRight(20) + "Score: " + leaderboardEntry.Score;
             }
-
         }
 
         LeaderboardCanvas.gameObject.SetActive(true);
@@ -194,106 +158,43 @@ public class MainMenuController : MonoBehaviour
 
     public void ShowMainCanvas()
     {
-        try
-        {
-            MainCanvas.gameObject.SetActive(true);
-        }
-        catch (System.Exception)
-        {
-            throw;
-        }
+        MainCanvas.gameObject.SetActive(true);
     }
 
     public void HideMainCanvas()
     {
-        try
-        {
-            MainCanvas.gameObject.SetActive(false);
-        }
-        catch (System.Exception)
-        {
-
-            throw;
-        }
+        MainCanvas.gameObject.SetActive(false);
     }
 
     public void ShowLoginCanvas()
     {
-        try
-        {
-            LoginCanvas.gameObject.SetActive(true);
-        }
-        catch (System.Exception)
-        {
-
-            throw;
-        }
+        LoginCanvas.gameObject.SetActive(true);
     }
 
     public void HideLoginCanvas()
     {
-        try
-        {
-            LoginCanvas.gameObject.SetActive(false);
-        }
-        catch (System.Exception)
-        {
-
-            throw;
-        }
+        LoginCanvas.gameObject.SetActive(false);
     }
 
     public void ShowUpdateUsernameCanvas()
     {
-        try
-        {
-            UpdateUsernameCanvas.gameObject.SetActive(true);
-        }
-        catch (System.Exception)
-        {
-
-            throw;
-        }
+        UpdateUsernameCanvas.gameObject.SetActive(true);
     }
 
     public void HideUpdateUsernameCanvas()
     {
-        try
-        {
-            UpdateUsernameCanvas.gameObject.SetActive(false);
-        }
-        catch (System.Exception)
-        {
-
-            throw;
-        }
+        UpdateUsernameCanvas.gameObject.SetActive(false);
     }
 
     public void ShowControlsCanvas()
     {
-        try
-        {
-            ControlsCanvas.gameObject.SetActive(true);
-        }
-        catch (System.Exception)
-        {
-            throw;
-        }
+        ControlsCanvas.gameObject.SetActive(true);
     }
 
     public void HideControlsCanvas()
     {
-        try
-        {
-            ControlsCanvas.gameObject.SetActive(false);
-        }
-        catch (System.Exception)
-        {
-
-            throw;
-        }
+        ControlsCanvas.gameObject.SetActive(false);
     }
-
     private void OnLeaderboardRequestCompleted(LeaderboardController leaderboard)
     {
         LeaderboardManager.sharedInstance.AddLeaderboard(leaderboard);
@@ -307,23 +208,15 @@ public class MainMenuController : MonoBehaviour
 
             StartCoroutine(WaitToShowLeaderboard());
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
-            throw;
+            LogManager.Log(ex.Message);
         }
     }
 
     public void HideLeaderboardCanvas()
     {
-        try
-        {
-            LeaderboardCanvas.gameObject.SetActive(false);
-        }
-        catch (System.Exception)
-        {
-
-            throw;
-        }
+        LeaderboardCanvas.gameObject.SetActive(false);
     }
 
     public void CloseGame()
@@ -332,10 +225,9 @@ public class MainMenuController : MonoBehaviour
         {
             Application.Quit();
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
-
-            throw;
+            LogManager.Log(ex.Message);
         }
     }
 }
