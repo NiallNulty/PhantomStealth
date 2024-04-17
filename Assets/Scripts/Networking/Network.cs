@@ -1,9 +1,6 @@
 using BrainCloud.LitJson;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
-using static Network;
 
 public class Network : MonoBehaviour
 {
@@ -341,8 +338,8 @@ public class Network : MonoBehaviour
 
                 }
 
-                if (requestUserEntityDataCompleted != null) 
-                requestUserEntityDataCompleted(userData);
+                if (requestUserEntityDataCompleted != null)
+                    requestUserEntityDataCompleted(userData);
             };
 
             // Failure callback lambda
@@ -366,39 +363,61 @@ public class Network : MonoBehaviour
         }
     }
 
-    public void CreateUserEntityData(CreateUserEntityDataCompleted createUserEntityDataCompleted = null, CreateUserEntityDataFailed createUserEntityDataFailed = null)
-
     public void PostScoreToLeaderboard(string leaderboardID, float time, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
     {
         PostScoreToLeaderboard(leaderboardID, time, GetUsername(), postScoreRequestCompleted, postScoreRequestFailed);
     }
 
     public void PostScoreToLeaderboard(string leaderboardID, float time, string nickname, PostScoreRequestCompleted postScoreRequestCompleted = null, PostScoreRequestFailed postScoreRequestFailed = null)
-
     {
         if (IsAuthenticated())
         {
             // Success callback lambda
             BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
             {
-
-                LogManager.Log("CreateUserEntityData success: " + responseData);
-
-                if (createUserEntityDataCompleted != null)
-                    createUserEntityDataCompleted();
-
                 LogManager.Log("PostScoreToLeaderboard success: " + responseData);
-
                 if (postScoreRequestCompleted != null)
                     postScoreRequestCompleted();
+            };
 
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("PostScoreToLeaderboard failed: " + statusMessage);
+                if (postScoreRequestFailed != null)
+                    postScoreRequestFailed();
+            };
+
+            // Make the BrainCloud request
+            long score = (long)(time);
+            string jsonOtherData = "{\"nickname\":\"" + nickname + "\"}";
+            brainCloudWrapper.LeaderboardService.PostScoreToLeaderboard(leaderboardID, score, jsonOtherData, successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("PostScoreToLeaderboard failed: user is not authenticated");
+
+            if (postScoreRequestFailed != null)
+                postScoreRequestFailed();
+        }
+    }
+
+    public void CreateUserEntityData(CreateUserEntityDataCompleted createUserEntityDataCompleted = null, CreateUserEntityDataFailed createUserEntityDataFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("CreateUserEntityData success: " + responseData);
+                if (createUserEntityDataCompleted != null)
+                    createUserEntityDataCompleted();
             };
 
             // Failure callback lambda
             BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
             {
                 LogManager.Log("CreateUserEntityData failed: " + statusMessage);
-
                 if (createUserEntityDataFailed != null)
                     createUserEntityDataFailed();
             };
@@ -418,7 +437,6 @@ public class Network : MonoBehaviour
         }
     }
 
-
     public void UpdateUserEntityData(string entityID, string entityType, string jsonData, UpdateUserEntityDataCompleted updateUserEntityDataCompleted = null, UpdateUserEntityDataFailed updateUserEntityDataFailed = null)
     {
         if (IsAuthenticated())
@@ -437,7 +455,7 @@ public class Network : MonoBehaviour
             {
                 LogManager.Log("EntityID: " + entityID);
                 LogManager.Log("EntityType: " + entityType);
-                LogManager.Log("JsonDAta: " + jsonData);
+                LogManager.Log("JsonData: " + jsonData);
                 LogManager.Log("UpdateUserEntityData failed: " + statusMessage);
 
                 if (updateUserEntityDataFailed != null)
@@ -456,25 +474,11 @@ public class Network : MonoBehaviour
         }
     }
 
-                LogManager.Log("PostScoreToLeaderboard failed: " + statusMessage);
 
-                if (postScoreRequestFailed != null)
-                    postScoreRequestFailed();
-            };
 
-            // Make the BrainCloud request
-            long score = (long)(time);   
-            string jsonOtherData = "{\"nickname\":\"" + nickname + "\"}";
-            brainCloudWrapper.LeaderboardService.PostScoreToLeaderboard(leaderboardID, score, jsonOtherData, successCallback, failureCallback);
-        }
-        else
-        {
-            LogManager.Log("PostScoreToLeaderboard failed: user is not authenticated");
 
-            if (postScoreRequestFailed != null)
-                postScoreRequestFailed();
-        }
-    }
+
+
 
 
 
