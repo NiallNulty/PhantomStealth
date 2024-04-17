@@ -101,11 +101,11 @@ public class MainMenuController : MonoBehaviour
 
     public void HandleUniversalAuthentication()
     {
-        if (Network.sharedInstance.HasAuthenticatedPreviously())
-        {
-            Network.sharedInstance.Reconnect();
-        }
-        else
+       // if (Network.sharedInstance.HasAuthenticatedPreviously())
+        //{
+        //    Network.sharedInstance.Reconnect();
+        //}
+        //else
         {
             Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, true, AuthenticationRequestCompleted, AuthenticationRequestFailed);
         }

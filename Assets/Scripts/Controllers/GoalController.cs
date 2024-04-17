@@ -33,7 +33,7 @@ public class GoalController : MonoBehaviour
         if (!Globals.isAnonymous)
         {
             //Network.sharedInstance.RequestUserEntityData();
-        StartCoroutine(WaitToGetEntity());
+            StartCoroutine(WaitToGetEntity());
 
         }
         else
