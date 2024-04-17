@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     public bool isFinished = false;
 
+    public string playerPathString = string.Empty;
+
     [SerializeField]
     public SerializableList<Vector3> playerPath = new SerializableList<Vector3>();
 
@@ -70,5 +72,10 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(SetPlayerPathPoints());
         }
+    }
+
+    public void SetPlayerPathString()
+    {
+        playerPathString = JsonUtility.ToJson(playerPath).ToString();
     }
 }
