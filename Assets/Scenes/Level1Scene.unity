@@ -910,6 +910,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3209406726171282025, guid: b517c9dbdc3b9fa47a0c7805d51dc406, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7736517358615520783, guid: b517c9dbdc3b9fa47a0c7805d51dc406, type: 3}
       propertyPath: m_Name
       value: AuthenticatingFailedCanvas
@@ -919,6 +923,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b517c9dbdc3b9fa47a0c7805d51dc406, type: 3}
+--- !u!1 &519685353 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7736517358615520783, guid: b517c9dbdc3b9fa47a0c7805d51dc406, type: 3}
+  m_PrefabInstance: {fileID: 519685352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &705557179
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1095,6 +1104,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3675397015162597804, guid: e6096ef1eac1c6b4f887adcc06235709, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6764369723738509842, guid: e6096ef1eac1c6b4f887adcc06235709, type: 3}
       propertyPath: m_Name
       value: AuthenticatingCanvas
@@ -1184,6 +1197,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6096ef1eac1c6b4f887adcc06235709, type: 3}
+--- !u!1 &730116521 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6764369723738509842, guid: e6096ef1eac1c6b4f887adcc06235709, type: 3}
+  m_PrefabInstance: {fileID: 730116520}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &796858178
 GameObject:
   m_ObjectHideFlags: 0
@@ -3245,6 +3263,8 @@ MonoBehaviour:
   passwordInputField: {fileID: 705557182}
   btnStorePath: {fileID: 261668521}
   btnRegister: {fileID: 1660748989}
+  AuthenticatingCanvas: {fileID: 730116521}
+  AuthenticatingFailedCanvas: {fileID: 519685353}
 --- !u!1001 &3206898816260666203
 PrefabInstance:
   m_ObjectHideFlags: 0

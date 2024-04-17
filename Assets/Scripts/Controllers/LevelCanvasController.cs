@@ -16,6 +16,10 @@ public class LevelCanvasController : MonoBehaviour
 
     [SerializeField] private GameObject btnRegister;
 
+    [SerializeField] private GameObject AuthenticatingCanvas;
+
+    [SerializeField] private GameObject AuthenticatingFailedCanvas;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +73,7 @@ public class LevelCanvasController : MonoBehaviour
     public void PostPathToUserEntity()
     {
         Network.sharedInstance.UpdateUserEntityData(Globals.EntityID, "userProgress", player.GetComponent<PlayerController>().playerPathString);
+        StartCoroutine(WaitToShowAuthenticationFailed());
     }
 
     public void RegisterUser()
@@ -76,5 +81,25 @@ public class LevelCanvasController : MonoBehaviour
         Network.AuthenticationRequestCompleted authenticationRequestCompleted = null;
         Network.AuthenticationRequestFailed authenticationRequestFailed = null;
         Network.sharedInstance.RequestAuthenticationUniversal(usernameInputField.text, passwordInputField.text, true, authenticationRequestCompleted, authenticationRequestFailed);
+        StartCoroutine(WaitToShowAuthenticationFailed());
+    }
+
+    private IEnumerator WaitToShowAuthenticationFailed()
+    {
+        AuthenticatingCanvas.SetActive(true);
+
+        yield return new WaitForSeconds(3f);
+
+        if (Globals.isAnonymous)
+        {
+            AuthenticatingFailedCanvas.SetActive(true);
+            btnRegister.SetActive(true);
+        }
+        else
+        {
+            DisableRegisterCanvas();
+        }
+
+        AuthenticatingCanvas.SetActive(false);
     }
 }
