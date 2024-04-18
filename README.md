@@ -53,4 +53,5 @@ Implementing User Entities was probably the most difficult, as that requires req
 
 ## Skills Learned
 - Post and Pull data from brainCloud
-- Use brainCloud Dashboards
+- How to navigate brainCloud Dashboards
+- Project Planning and Time Management (doing project in free time / estimating delivery date and meeting the deadline)
