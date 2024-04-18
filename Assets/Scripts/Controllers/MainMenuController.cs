@@ -163,7 +163,14 @@ public class MainMenuController : MonoBehaviour
 
         if (leaderboard != null)
         {
-            for (int i = 0; i < 5; i++)
+            int countOfPlayersToShow = leaderboard.GetCount();
+
+            if (countOfPlayersToShow > 5)
+            {
+                countOfPlayersToShow = 5;
+            }
+
+            for (int i = 0; i < countOfPlayersToShow; i++)
             {
                 LeaderboardEntry leaderboardEntry = leaderboard.GetLeaderboardEntryAtIndex(i);
                 scores[i].text = (i + 1).ToString() + ". Name: " + leaderboardEntry.Nickname.PadRight(20) + "Score: " + leaderboardEntry.Score;
