@@ -46,10 +46,11 @@ Each request is outputted to a log (txt) file while the game is running. This wi
 - You can view the Leaderboards by selecting Global > Leaderboards > Leaderboards and selecting "Main" from the dropdown
 
 ## What I found easy
+Anonymous and Universal Authentication were relatively easy to implement. The brainCloud Dashboard is also very easy to use so you know the implemented changes are working.
 
 ## What I found difficult
+Implementing User Entities was probably the most difficult, as that requires requesting an EnitityID before Updating an Entity.
 
 ## Skills Learned
-
-## Additional Links
-- Showcase Video:
+- Post and Pull data from brainCloud
+- Use brainCloud Dashboards
