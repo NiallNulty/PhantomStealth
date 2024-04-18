@@ -43,6 +43,10 @@ public class MainMenuController : MonoBehaviour
         {
             Network.sharedInstance.LogOut();
         }
+
+        Globals.EntityID = string.Empty;
+        Globals.GhostPath.Clear();
+        Globals.GhostPathEnabled = false;
     }
 
     public void ChangeGhostPathEnabledValue()
@@ -71,11 +75,6 @@ public class MainMenuController : MonoBehaviour
     {
         AuthenticatingCanvas.SetActive(true);
 
-        if (Network.sharedInstance.HasAuthenticatedPreviously())
-        {
-            Network.sharedInstance.Reconnect();
-        }
-        else
         {
             Network.sharedInstance.RequestAnonymousAuthentication();
         }
