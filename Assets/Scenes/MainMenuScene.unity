@@ -909,6 +909,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 701652098}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 701652098}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowMainCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: HideHintsCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MainMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3533435371895603566, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7055311865241754232, guid: 41c34100d97d218419fcf43b4169fe1f, type: 3}
       propertyPath: m_Name
       value: HintsCanvas
@@ -1341,7 +1377,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Phantom Stealth v1.25 (Proof of Concept)
+  m_text: Phantom Stealth v1.26 (Proof of Concept)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
