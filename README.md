@@ -1,5 +1,5 @@
 # Phantom Stealth
-Niall Nulty 20/04/2024
+Niall Nulty 19/04/2024
 
 ## Brief Project Overview
 The purpose of this project is to integrate the backend platform brainCloud into a simple Unity client. The project itself will be a single player stealth game where the objective is to make it to the end goal of the level. The level will have a time limit and a path to follow for the player to make it to their goal. The player will have to avoid detection from an enemy while making their way to the goal. 
