@@ -9,4 +9,5 @@ public static class Globals
     public static bool isNewUser { get; set; }
     public static bool GhostPathEnabled { get; set; }
     public static List<Vector3> GhostPath { get; set; }
+    public static string hint { get; set; }
 }
