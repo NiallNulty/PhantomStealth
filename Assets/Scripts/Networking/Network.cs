@@ -20,6 +20,8 @@ public class Network : MonoBehaviour
     public delegate void UpdateUserEntityDataFailed();
     public delegate void PostScoreRequestCompleted();
     public delegate void PostScoreRequestFailed();
+    public delegate void GetHintRequestCompleted();
+    public delegate void GetHintRequestFailed();
 
     public static Network sharedInstance;
 
@@ -498,6 +500,51 @@ public class Network : MonoBehaviour
                 updateUserEntityDataFailed();
         }
     }
+    #endregion
+
+    #region Custom Script
+
+    public void GetHints(string hint, GetHintRequestCompleted getHintRequestCompleted = null, GetHintRequestFailed getHintRequestFailed = null)
+    {
+        if (IsAuthenticated())
+        {
+            // Success callback lambda
+            BrainCloud.SuccessCallback successCallback = (responseData, cbObject) =>
+            {
+                LogManager.Log("GetHints success: " + responseData);
+
+                JsonData jsonData = JsonMapper.ToObject(responseData);
+                JsonData hintMessage = jsonData["data"]["response"];
+
+                Globals.hint = hintMessage.ToString();
+
+                if (getHintRequestCompleted != null)
+                    getHintRequestCompleted();
+            };
+
+            // Failure callback lambda
+            BrainCloud.FailureCallback failureCallback = (statusMessage, code, error, cbObject) =>
+            {
+                LogManager.Log("GetHints failed: " + statusMessage);
+                
+                if (getHintRequestFailed != null)
+                    getHintRequestFailed();
+            };
+
+            string jsonScriptData = "{\"hint\":\""+ hint +"\"}";
+
+
+            brainCloudWrapper.ScriptService.RunScript("GetHints", jsonScriptData, successCallback, failureCallback);
+        }
+        else
+        {
+            LogManager.Log("PostScoreToLeaderboards failed: user is not authenticated");
+
+            if (getHintRequestFailed != null)
+                getHintRequestFailed();
+        }
+    }
+
     #endregion
 
 }

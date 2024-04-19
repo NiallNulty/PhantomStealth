@@ -19,6 +19,8 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField] private GameObject AuthenticatingFailedCanvas;
 
+    [SerializeField] private GameObject HintsCanvas;
+
     [SerializeField] private TMP_InputField usernameInputField;
 
     [SerializeField] private TMP_InputField passwordInputField;
@@ -45,7 +47,12 @@ public class MainMenuController : MonoBehaviour
         }
 
         Globals.EntityID = string.Empty;
-        Globals.GhostPath.Clear();
+
+        if (Globals.GhostPath != null)
+        {
+            Globals.GhostPath.Clear();
+        }
+
         Globals.GhostPathEnabled = false;
     }
 
@@ -254,6 +261,47 @@ public class MainMenuController : MonoBehaviour
     public void HideLeaderboardCanvas()
     {
         LeaderboardCanvas.gameObject.SetActive(false);
+    }
+
+    public void ShowHintsCanvas()
+    {
+        try
+        {
+            Network.sharedInstance.RequestAnonymousAuthentication();
+
+            StartCoroutine(WaitToShowHintsCanvas());
+        }
+        catch (System.Exception ex)
+        {
+            LogManager.Log(ex.Message);
+        }
+    }
+
+    private IEnumerator WaitToShowHintsCanvas()
+    {
+        AuthenticatingCanvas.SetActive(true);
+
+        Network.sharedInstance.RequestAnonymousAuthentication();
+        yield return new WaitForSecondsRealtime(2f);
+
+        if (Network.sharedInstance.IsAuthenticated())
+        {
+            HintsCanvas.gameObject.SetActive(true);
+        }
+        else
+        {
+            AuthenticatingFailedCanvas.SetActive(true);
+            ShowMainCanvas();
+        }
+
+        AuthenticatingCanvas.SetActive(false);
+    }
+
+    public void HideHintsCanvas()
+    {
+        Network.sharedInstance.LogOut();
+
+        HintsCanvas.gameObject.SetActive(false);
     }
 
     public void CloseGame()
